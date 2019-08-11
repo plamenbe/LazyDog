@@ -8,7 +8,7 @@
   http://www.arduinoelettronica.com
 
 */
-#define FW_VERSION  1.1
+#define FW_VERSION  1.1.1
 
 #include <avr/sleep.h>    // Sleep Modes
 //#include <avr/power.h>    // Power management
@@ -76,6 +76,10 @@ void loop() {
 
   system_sleep();
 
+// In test mode the load should be replaced by LED or apropriate indicator for convinient observation.
+// Every INCREMENT_SECS, LED will flashing for the number of the wake-ups since starting test mode.
+// The device wakes-up every INCREMENT_SECS.
+
   if (test_mode) {
     pinMode(PIN_DEBUG, OUTPUT);
     for (uint16_t i = 0; i < (secs_counter / INCREMENT_SECS); i++) {
@@ -84,7 +88,7 @@ void loop() {
       digitalWrite(PIN_DEBUG, !ACTIVE_STATE);
       delay(5 * DEBUG_PULSE_DURATION);
     }
-    pinMode(PIN_DEBUG, INPUT);
+    pinMode(PIN_DEBUG, INPUT_PULLUP); // If PIN_DEBUG = PIN_RELAY, pinMode should be INPUT_PULLUP for stable work of the MOSFET. For Relay model this should be just INPUT.
   }
 
 
